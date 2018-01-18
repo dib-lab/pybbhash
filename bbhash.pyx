@@ -1,6 +1,7 @@
 # distutils: language = c++
 from libcpp.vector cimport vector
 from libc.stdint cimport uint64_t
+from cython.operator cimport dereference as deref
 
 ### wrap iostream stuff
 
@@ -32,27 +33,29 @@ cdef extern from "<fstream>" namespace "std":
         ifstream(const char*) except +
         ifstream(const char*, open_mode) except+
 
-### import C++ wrapper in bbhash-wrap
+### Wrap the headers from BBhash
 
-cdef extern from "bbhash-wrap.hh" namespace "boomphf":
+cdef extern from "BooPHF.h" namespace "boomphf":
+    cdef cppclass SingleHashFunctor[T]:
+        uint64_t operator ()
+
     cdef cppclass mphf[T,U]:
-        mphf() except +
-
-cdef extern from "bbhash-wrap.hh":
-    cdef cppclass kmer_mphf:
-        kmer_mphf(vector[uint64_t] kmers, unsigned long long nelem, int num_thread, float gamma)
-        int lookup(int)
-        void load(ifstream *)
-        void save(ofstream *)
+        mphf(unsigned long long, vector[T], int, float) except +
+        uint64_t lookup(uint64_t)
+        void save(ofstream)
+        void load(ifstream)
 
 ### provide a Python wrapper.
 
+ctypedef SingleHashFunctor[uint64_t] hasher_t
+ctypedef mphf[uint64_t, hasher_t] mphf_t
+
 cdef class PyMPHF:
-    cdef kmer_mphf * c_mphf
+    cdef mphf_t * c_mphf
 
     def __cinit__(self, list kk, unsigned long long nelem, int num_thread, float gamma):
-        cdef vector[uint64_t] kmers = kk;
-        self.c_mphf = new kmer_mphf(kmers, nelem, num_thread, gamma);
+        cdef vector[uint64_t] kmers = kk
+        self.c_mphf = new mphf_t(nelem, kmers, num_thread, gamma)
 
     def lookup(self, unsigned long long kmer):
         return self.c_mphf.lookup(kmer)
@@ -61,7 +64,7 @@ cdef class PyMPHF:
         cdef ofstream* outputter
         outputter = new ofstream(filename.encode(), binary)
         try:
-            self.c_mphf.save(outputter)
+            self.c_mphf.save(deref(outputter))
         finally:
             del outputter
 
@@ -69,7 +72,7 @@ cdef class PyMPHF:
         cdef ifstream* inputter
         inputter = new ifstream(filename.encode(), binary)
         try:
-            self.c_mphf.load(inputter)
+            self.c_mphf.load(deref(inputter))
         finally:
             del inputter
 

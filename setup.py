@@ -18,7 +18,9 @@ setup(
    license="BSD 3-clause",
    url="http://github.com/dib-lab/pybbhash",
    ext_modules =
-          [Extension('bbhash', sources=['bbhash.pyx', 'bbhash-wrap.cc'],
+          [Extension('bbhash',
+                     sources=['bbhash.pyx'],
+                     depends=['BooPHF.h'],
                      language='c++',
                      extra_compile_args=EXTRA_COMPILE_ARGS)],
    cmdclass = {'build_ext': build_ext}
