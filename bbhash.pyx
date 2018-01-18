@@ -1,6 +1,10 @@
 # distutils: language = c++
 from libcpp.vector cimport vector
 
+### wrap iostream stuff
+
+# iostream stuff taken from:
+#   https://stackoverflow.com/questions/30984078/cython-working-with-c-streams
 cdef extern from "<iostream>" namespace "std":
     cdef cppclass ostream:
         ostream& write(const char*, int) except +
@@ -27,6 +31,8 @@ cdef extern from "<fstream>" namespace "std":
         ifstream(const char*) except +
         ifstream(const char*, open_mode) except+
 
+### import C++ wrapper in bbhash-wrap
+
 cdef extern from "bbhash-wrap.hh" namespace "boomphf":
     cdef cppclass mphf[T,U]:
         mphf() except +
@@ -37,6 +43,8 @@ cdef extern from "bbhash-wrap.hh":
         int lookup(int)
         void load(ifstream *)
         void save(ofstream *)
+
+### provide a Python wrapper.
 
 cdef class PyMPHF:
     cdef kmer_mphf * c_mphf
