@@ -11,4 +11,7 @@ public:
     kmer_mphf(std::vector<uint64_t> kmers, size_t nelem, int num_thread,
               double gamma);
     uint64_t lookup(uint64_t kmer);
+
+    void load(std::istream *is) const;
+    void save(std::ostream *os) const;
 };

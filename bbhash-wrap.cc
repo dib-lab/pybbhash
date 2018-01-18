@@ -9,3 +9,13 @@ kmer_mphf::kmer_mphf(std::vector<uint64_t> kmers, size_t nelem, int num_thread,
 }
 
 uint64_t kmer_mphf::lookup(uint64_t kmer) { return bphf->lookup(kmer); }
+
+void kmer_mphf::load(std::istream *is) const
+{
+    bphf->load(*is);
+}
+
+void kmer_mphf::save(std::ostream *os) const
+{
+    bphf->save(*os);
+}
