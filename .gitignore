@@ -1,5 +1,5 @@
 *~
 bbhash.cpp
-bbhash.cpython-36m-darwin.so
+bbhash.cpython-*.so
 build/
 bbhash.egg-info
