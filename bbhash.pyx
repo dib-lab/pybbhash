@@ -1,5 +1,6 @@
 # distutils: language = c++
 from libcpp.vector cimport vector
+from libcpp.memory cimport unique_ptr
 from libc.stdint cimport uint64_t
 from cython.operator cimport dereference as deref
 
@@ -51,20 +52,20 @@ ctypedef SingleHashFunctor[uint64_t] hasher_t
 ctypedef mphf[uint64_t, hasher_t] mphf_t
 
 cdef class PyMPHF:
-    cdef mphf_t * c_mphf
+    cdef unique_ptr[mphf_t] c_mphf
 
     def __cinit__(self, list kk, unsigned long long nelem, int num_thread, float gamma):
         cdef vector[uint64_t] kmers = kk
-        self.c_mphf = new mphf_t(nelem, kmers, num_thread, gamma)
+        self.c_mphf.reset(new mphf_t(nelem, kmers, num_thread, gamma))
 
     def lookup(self, unsigned long long kmer):
-        return self.c_mphf.lookup(kmer)
+        return deref(self.c_mphf).lookup(kmer)
 
     def save(self, str filename):
         cdef ofstream* outputter
         outputter = new ofstream(filename.encode(), binary)
         try:
-            self.c_mphf.save(deref(outputter))
+            deref(self.c_mphf).save(deref(outputter))
         finally:
             del outputter
 
@@ -72,7 +73,7 @@ cdef class PyMPHF:
         cdef ifstream* inputter
         inputter = new ifstream(filename.encode(), binary)
         try:
-            self.c_mphf.load(deref(inputter))
+            deref(self.c_mphf).load(deref(inputter))
         finally:
             del inputter
 
