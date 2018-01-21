@@ -40,7 +40,7 @@ cdef extern from "bbhash-wrap.hh" namespace "boomphf":
 
 cdef extern from "bbhash-wrap.hh":
     cdef cppclass kmer_mphf:
-        kmer_mphf(vector[uint64_t] kmers, int nelem, int num_thread, float gamma)
+        kmer_mphf(vector[uint64_t] kmers, unsigned long long nelem, int num_thread, float gamma)
         int lookup(int)
         void load(ifstream *)
         void save(ofstream *)
