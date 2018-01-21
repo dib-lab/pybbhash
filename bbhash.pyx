@@ -50,7 +50,7 @@ cdef extern from "bbhash-wrap.hh":
 cdef class PyMPHF:
     cdef kmer_mphf * c_mphf
 
-    def __cinit__(self, list kk, int nelem, int num_thread, float gamma):
+    def __cinit__(self, list kk, unsigned long long nelem, int num_thread, float gamma):
         cdef vector[uint64_t] kmers = kk;
         self.c_mphf = new kmer_mphf(kmers, nelem, num_thread, gamma);
 
