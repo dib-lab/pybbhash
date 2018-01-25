@@ -3,3 +3,5 @@ bbhash.cpp
 bbhash.cpython-*.so
 build/
 bbhash.egg-info
+dist
+MANIFEST
