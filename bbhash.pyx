@@ -1,7 +1,7 @@
 # distutils: language = c++
 from libcpp.vector cimport vector
 from libcpp.memory cimport unique_ptr
-from libc.stdint cimport uint64_t
+from libc.stdint cimport uint64_t, UINT64_MAX
 from cython.operator cimport dereference as deref
 
 ### wrap iostream stuff
@@ -58,8 +58,11 @@ cdef class PyMPHF:
         cdef vector[uint64_t] kmers = kk
         self.c_mphf.reset(new mphf_t(nelem, kmers, num_thread, gamma))
 
-    def lookup(self, unsigned long long kmer):
-        return deref(self.c_mphf).lookup(kmer)
+    def lookup(self, uint64_t kmer):
+        cdef uint64_t value = deref(self.c_mphf).lookup(kmer)
+        if value != UINT64_MAX:
+            return value
+        return None
 
     def save(self, str filename):
         cdef ofstream* outputter

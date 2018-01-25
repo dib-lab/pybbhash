@@ -3,10 +3,10 @@ from distutils.core import setup
 from distutils.extension import Extension
 from Cython.Distutils import build_ext
 
-EXTRA_COMPILE_ARGS=[]
+EXTRA_COMPILE_ARGS=['-std=c++11']
 if sys.platform == 'darwin':              # Mac OS X?
     EXTRA_COMPILE_ARGS.extend(['-arch', 'x86_64', '-mmacosx-version-min=10.7',
-                               '-std=c++11', '-stdlib=libc++'])
+                               '-stdlib=libc++'])
  
 
 setup(
