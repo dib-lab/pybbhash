@@ -23,5 +23,6 @@ setup(
                      depends=['BooPHF.h'],
                      language='c++',
                      extra_compile_args=EXTRA_COMPILE_ARGS)],
+   headers=['BooPHF.h'],
    cmdclass = {'build_ext': build_ext}
 )
