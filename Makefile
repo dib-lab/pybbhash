@@ -4,3 +4,7 @@ all:
 clean:
 	rm -fr bbhash.cpp bbhash.cpython-36m-darwin.so build/ bbhash.egg-info
 
+upload:
+	rm -fr dist
+	python setup.py sdist
+	twine upload dist/bbhash-*.tar.gz
