@@ -17,6 +17,7 @@ setup(
    author_email="titus@idyll.org",
    license="BSD 3-clause",
    url="http://github.com/dib-lab/pybbhash",
+   setup_requires=['Cython>=0.25.2', "setuptools>=18.0"],
    ext_modules =
           [Extension('bbhash',
                      sources=['bbhash.pyx'],
