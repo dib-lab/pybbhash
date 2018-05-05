@@ -2,9 +2,9 @@ import numpy
 import bbhash
 
 class BBHashTable(object):
-    def __init__(self, all_kmers, dtype=numpy.uint32):
+    def __init__(self, all_kmers, fill=0, dtype=numpy.uint32):
         self.mphf_to_kmer = numpy.zeros(len(all_kmers), numpy.uint64)
-        self.mphf_to_table = numpy.zeros(len(all_kmers), dtype)
+        self.mphf_to_table = numpy.full(len(all_kmers), fill, dtype)
         self.mphf = bbhash.PyMPHF(all_kmers, len(all_kmers), 4, 1.0)
 
         for k in all_kmers:
@@ -21,7 +21,6 @@ class BBHashTable(object):
 
     def __setitem__(self, kmer_hash, value):
         mp_hash = self.mphf.lookup(kmer_hash)
-        print(kmer_hash, mp_hash, value)
         if mp_hash is None or self.mphf_to_kmer[mp_hash] != kmer_hash:
             raise ValueError("given kmer_hash is unknown to mphf")
 
