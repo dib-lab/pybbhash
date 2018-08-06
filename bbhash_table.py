@@ -11,13 +11,13 @@ class BBHashTable(object):
             mp_hash = self.mphf.lookup(k)
             self.mphf_to_kmer[mp_hash] = k
 
-    def __getitem__(self, kmer_hash):
+    def __getitem__(self, kmer_hash, default_val=None):
         mp_hash = self.mphf.lookup(kmer_hash)
         if mp_hash is None:
-            return None
+            return default_val
         elif self.mphf_to_kmer[mp_hash] == kmer_hash:   # found!
             return self.mphf_to_table[mp_hash]
-        return None
+        return default_val
 
     def __setitem__(self, kmer_hash, value):
         mp_hash = self.mphf.lookup(kmer_hash)
