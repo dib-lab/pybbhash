@@ -19,6 +19,7 @@ setup(
    url="http://github.com/dib-lab/pybbhash",
    setup_requires=["Cython>=0.25.2", "setuptools>=18.0"],
    install_requires=['Cython>=0.25.2', "setuptools>=18.0"],
+   modules = ['bbhash_table.py'],
    ext_modules =
           [Extension('bbhash',
                      sources=['bbhash.pyx'],
