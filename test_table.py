@@ -12,4 +12,3 @@ def test_basic():
 
     for kmer_hash, i in zip(all_kmers, range(100, 200)):
         assert table[kmer_hash] == i
-    
