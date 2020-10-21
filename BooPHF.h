@@ -924,7 +924,7 @@ we need this 2-functors scheme because HashFunctors won't work with unordered_ma
 
 				double total_fastmode_ram =  (_fastModeLevel+1) +  ( pow(_proba_collision,_fastModeLevel)) * (_nb_levels-(_fastModeLevel+1))   ;
 				
-				printf("for info, total work write each  : %.3f    total work inram from level %i : %.3f  total work raw : %.3f \n",total_writeEach,_fastModeLevel,total_fastmode_ram,total_raw);
+                //				printf("for info, total work write each  : %.3f    total work inram from level %i : %.3f  total work raw : %.3f \n",total_writeEach,_fastModeLevel,total_fastmode_ram,total_raw);
 
 				if(writeEach)
 				{
