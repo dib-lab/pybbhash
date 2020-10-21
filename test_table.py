@@ -1,4 +1,4 @@
-from bbhash_table import BBHashTable
+from bbhash_table2 import BBHashTable
 import random
 
 def test_basic():

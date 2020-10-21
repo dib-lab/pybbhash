@@ -6,3 +6,5 @@ bbhash.egg-info
 dist
 MANIFEST
 __pycache__
+bbhash_table2.cpp
+bbhash_table2.cpython-*.so
