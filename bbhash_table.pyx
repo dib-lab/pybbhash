@@ -57,7 +57,6 @@ class BBHashTable(object):
         # potential other optimizations -
         # - speed up access to self.mphf.lookup by doing direct calls
         values = defaultdict(int)
-        cdef list c_hashes = hashes
 
         hashes = numpy.array(hashes, dtype=numpy.uint64)
         cdef unsigned long[:] hashes_view = hashes
@@ -73,6 +72,8 @@ class BBHashTable(object):
         cdef unsigned int i = 0
         while i < c_hashes_len:
             c_hashval = hashes_view[i]
+            i += 1
+
             mp_hash = self.mphf.lookup(c_hashval)
             if mp_hash is None:
                 continue
@@ -82,8 +83,6 @@ class BBHashTable(object):
             if mphf_to_hash_view[c_mp_hash] == c_hashval:   # found!
                 c_value = mphf_to_value_view[c_mp_hash]
                 values[c_value] += 1
-
-            i += 1
 
         return values
 
