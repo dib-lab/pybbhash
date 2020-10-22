@@ -33,6 +33,12 @@ class BBHashTable(object):
 
         self.mphf_to_value[mp_hash] = value
 
+    def get_unique_values(self, hashes):
+        values = set()
+        for hashval in hashes:
+            values.add(self[hashval])
+        return values
+
     def save(self, mphf_filename, array_filename):
         self.mphf.save(mphf_filename)
         with open(array_filename, "wb") as fp:
