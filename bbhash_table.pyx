@@ -11,7 +11,11 @@ class BBHashTable(object):
     def __init_(self):
         pass
 
-    def initialize(self, all_hashes, fill=0, dtype=numpy.uint32):
+    def initialize(self, all_hashes, fill=None, dtype=numpy.uint32):
+        "Initialize table with set of hashes."
+        if fill is None:
+            fill = numpy.iinfo(dtype).max   # @CTB test
+            self.emptyval = fill
         # MPHF -> hash
         self.mphf_to_hash = numpy.zeros(len(all_hashes), numpy.uint64)
         # MPHF -> stored value 
@@ -23,9 +27,11 @@ class BBHashTable(object):
             self.mphf_to_hash[mp_hash] = k
 
     def __len__(self):
+        "Size of table."
         return len(self.mphf_to_hash)
 
     def __getitem__(self, hashval, default_val=None):
+        "Retrieve value for item."
         mp_hash = self.mphf.lookup(hashval)
         if mp_hash is None:
             return default_val
@@ -34,6 +40,7 @@ class BBHashTable(object):
         return default_val
 
     def __setitem__(self, hashval, value):
+        "Save value."
         mp_hash = self.mphf.lookup(hashval)
         if mp_hash is None or self.mphf_to_hash[mp_hash] != hashval:
             raise ValueError("given hashval is unknown to mphf")
@@ -41,12 +48,37 @@ class BBHashTable(object):
         self.mphf_to_value[mp_hash] = value
 
     def get_unique_values(self, hashes):
+        "Retrieve unique values for item."
+        # change hashes to cdef list?
+        # change values to cdef set?
         values = set()
+
+        mphf_to_hash = self.mphf_to_hash
+        mphf_to_value = self.mphf_to_value
+
+        cdef unsigned long[:] mphf_to_hash_view = mphf_to_hash
+        cdef unsigned int[:] mphf_to_value_view = mphf_to_value
+
+        cdef unsigned long c_hashval
+        cdef unsigned int c_mp_hash
+        cdef unsigned int c_value
+
         for hashval in hashes:
-            values.add(self[hashval])
+            mp_hash = self.mphf.lookup(hashval)
+            if mp_hash is None:
+                continue
+
+            c_hashval = hashval
+            c_mp_hash = mp_hash
+
+            if mphf_to_hash_view[c_mp_hash] == c_hashval:   # found!
+                c_value = mphf_to_value_view[c_mp_hash]
+                values.add(c_value)
+
         return values
 
     def save(self, mphf_filename, array_filename):
+        "Save to disk."
         self.mphf.save(mphf_filename)
         with open(array_filename, "wb") as fp:
             numpy.savez_compressed(fp,
@@ -55,6 +87,7 @@ class BBHashTable(object):
 
     @classmethod
     def load(cls, mphf_filename, array_filename):
+        "Load from disk."
         if not os.path.exists(mphf_filename):
             raise FileNotFoundError(mphf_filename)
         mphf = bbhash.load_mphf(mphf_filename)
