@@ -1,3 +1,7 @@
+from libc.stdint cimport UINT64_MAX
+from cython.operator cimport dereference as deref
+from libcpp.memory cimport unique_ptr
+
 import numpy
 import bbhash
 import os
@@ -16,7 +20,7 @@ class BBHashTable(object):
         "Initialize table with set of hashes."
         if fill is None:
             fill = numpy.iinfo(dtype).max   # @CTB test
-            self.emptyval = fill
+            self.emptyval = fill            # @CTB: note, not yet saved/loaded
         # MPHF -> hash
         self.mphf_to_hash = numpy.zeros(len(all_hashes), numpy.uint64)
         # MPHF -> stored value 
@@ -50,15 +54,13 @@ class BBHashTable(object):
 
     def get_unique_values(self, hashes):
         "Retrieve unique values for item."
-        # change hashes to cdef list?
-        # change values to cdef set?
+        # potential other optimizations -
+        # - speed up access to self.mphf.lookup by doing direct calls
         values = defaultdict(int)
+        cdef list c_hashes = hashes
 
-        mphf_to_hash = self.mphf_to_hash
-        mphf_to_value = self.mphf_to_value
-
-        cdef unsigned long[:] mphf_to_hash_view = mphf_to_hash
-        cdef unsigned int[:] mphf_to_value_view = mphf_to_value
+        cdef unsigned long[:] mphf_to_hash_view = self.mphf_to_hash
+        cdef unsigned int[:] mphf_to_value_view = self.mphf_to_value
 
         cdef unsigned long c_hashval
         cdef unsigned int c_mp_hash
