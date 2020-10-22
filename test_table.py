@@ -1,4 +1,4 @@
-from bbhash_table2 import BBHashTable
+from bbhash_table import BBHashTable
 import random
 import numpy
 
