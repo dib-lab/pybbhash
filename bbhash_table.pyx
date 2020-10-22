@@ -1,6 +1,7 @@
 import numpy
 import bbhash
 import os
+from collections import defaultdict
 
 class BBHashTable(object):
     """\
@@ -51,7 +52,7 @@ class BBHashTable(object):
         "Retrieve unique values for item."
         # change hashes to cdef list?
         # change values to cdef set?
-        values = set()
+        values = defaultdict(int)
 
         mphf_to_hash = self.mphf_to_hash
         mphf_to_value = self.mphf_to_value
@@ -73,7 +74,7 @@ class BBHashTable(object):
 
             if mphf_to_hash_view[c_mp_hash] == c_hashval:   # found!
                 c_value = mphf_to_value_view[c_mp_hash]
-                values.add(c_value)
+                values[c_value] += 1
 
         return values
 
