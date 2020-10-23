@@ -17,8 +17,8 @@ setup(
    author_email="titus@idyll.org",
    license="BSD 3-clause",
    url="http://github.com/dib-lab/pybbhash",
-   setup_requires=["Cython>=0.29.21", "setuptools>=50.3.2"],
-   install_requires=['Cython>=0.29.21', "setuptools>=50.3.2"],
+   setup_requires=["Cython>=0.29.21", "setuptools>=50.3.2", "numpy"],
+   install_requires=['Cython>=0.29.21', "setuptools>=50.3.2", "numpy"],
    ext_modules =
           [Extension('bbhash',
                      sources=['bbhash.pyx'],
