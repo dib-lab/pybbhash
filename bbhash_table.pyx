@@ -1,4 +1,4 @@
-from libc.stdint cimport UINT64_MAX
+from libc.stdint cimport UINT32_MAX, uint64_t, uint32_t
 from cython.operator cimport dereference as deref
 from libcpp.memory cimport unique_ptr
 
@@ -13,18 +13,20 @@ class BBHashTable(object):
 
     Handles the situation where the query hash may not be in the table.
     """
+    dtype = numpy.uint32
+
     def __init_(self):
         pass
 
-    def initialize(self, all_hashes, fill=None, dtype=numpy.uint32):
+    def initialize(self, all_hashes, fill=None):
         "Initialize table with set of hashes."
         if fill is None:
-            fill = numpy.iinfo(dtype).max   # @CTB test
-            self.emptyval = fill            # @CTB: note, not yet saved/loaded
+            fill = numpy.iinfo(self.dtype).max   # @CTB test
+
         # MPHF -> hash
         self.mphf_to_hash = numpy.zeros(len(all_hashes), numpy.uint64)
         # MPHF -> stored value 
-        self.mphf_to_value = numpy.full(len(all_hashes), fill, dtype)
+        self.mphf_to_value = numpy.full(len(all_hashes), fill, self.dtype)
         self.mphf = bbhash.PyMPHF(all_hashes, len(all_hashes), 4, 1.0,)
 
         for k in all_hashes:
@@ -59,17 +61,17 @@ class BBHashTable(object):
         values = defaultdict(int)
 
         hashes = numpy.array(hashes, dtype=numpy.uint64)
-        cdef unsigned long[:] hashes_view = hashes
-        cdef unsigned int c_hashes_len = len(hashes)
+        cdef uint64_t[:] hashes_view = hashes
+        cdef uint32_t c_hashes_len = len(hashes)
 
-        cdef unsigned long[:] mphf_to_hash_view = self.mphf_to_hash
-        cdef unsigned int[:] mphf_to_value_view = self.mphf_to_value
+        cdef uint64_t[:] mphf_to_hash_view = self.mphf_to_hash
+        cdef uint32_t[:] mphf_to_value_view = self.mphf_to_value
 
-        cdef unsigned long c_hashval
-        cdef unsigned int c_mp_hash
-        cdef unsigned int c_value
+        cdef uint64_t c_hashval
+        cdef uint32_t c_mp_hash
+        cdef uint32_t c_value
 
-        cdef unsigned int i = 0
+        cdef uint32_t i = 0
         while i < c_hashes_len:
             c_hashval = hashes_view[i]
             i += 1
