@@ -26,6 +26,9 @@ jobs:
       - run: pip install -U pip setuptools
       - run: pip install -U Cython
 
+      - name: Install coverage dependencies
+        run: pip install pytest-cov
+
       - name: Build
         run: python setup.py build_ext --inplace
 
