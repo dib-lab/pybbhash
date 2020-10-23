@@ -1,4 +1,4 @@
-from libc.stdint cimport UINT32_MAX, uint64_t, uint32_t
+from libc.stdint cimport UINT32_MAX, UINT64_MAX, uint64_t, uint32_t
 from cython.operator cimport dereference as deref
 from libcpp.memory cimport unique_ptr
 
@@ -64,23 +64,23 @@ class BBHashTable(object):
         cdef uint64_t[:] hashes_view = hashes
         cdef uint32_t c_hashes_len = len(hashes)
 
+        mp_hashes = self.mphf.lookup_many(hashes)
+        cdef uint64_t[:] mp_hashes_view = mp_hashes
+
         cdef uint64_t[:] mphf_to_hash_view = self.mphf_to_hash
         cdef uint32_t[:] mphf_to_value_view = self.mphf_to_value
 
-        cdef uint64_t c_hashval
-        cdef uint32_t c_mp_hash
+        cdef uint64_t c_mp_hash
         cdef uint32_t c_value
 
         cdef uint32_t i = 0
         while i < c_hashes_len:
             c_hashval = hashes_view[i]
+            c_mp_hash = mp_hashes_view[i]
             i += 1
 
-            mp_hash = self.mphf.lookup(c_hashval)
-            if mp_hash is None:
+            if c_mp_hash == UINT64_MAX:
                 continue
-
-            c_mp_hash = mp_hash
 
             if mphf_to_hash_view[c_mp_hash] == c_hashval:   # found!
                 c_value = mphf_to_value_view[c_mp_hash]
