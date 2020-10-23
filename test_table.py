@@ -2,6 +2,7 @@
 import random
 import tempfile
 import os.path
+from collections import defaultdict
 
 from bbhash_table import BBHashTable
 
@@ -57,16 +58,32 @@ def test_get_unique_values_noexist():
     for hashval, value in zip(all_hashes, [1, 2, 3, 4, 5]*20):
         assert table[hashval] == value
 
+    # since we're using random, we have to make sure the non-existent hashes
+    # are not present in all_hashes. Convoluted, yes... but saves us from
+    # that one in a bajillion chance of collision making the test fail! :)
     noexist_hashes = set([ random.randint(100, 2**32) for i in range(100) ])
     noexist_hashes -= set(all_hashes)
     all_hashes += list(noexist_hashes)
-    value_count = table.get_unique_values(all_hashes)
-    assert value_count[1] == 20
-    assert value_count[2] == 20
-    assert value_count[3] == 20
-    assert value_count[4] == 20
-    assert value_count[5] == 20
-    assert len(list(value_count)) == 5
+    value_counts = table.get_unique_values(all_hashes)
+    assert value_counts[1] == 20
+    assert value_counts[2] == 20
+    assert value_counts[3] == 20
+    assert value_counts[4] == 20
+    assert value_counts[5] == 20
+    assert len(list(value_counts)) == 5
+
+    # compare get_unique_values with boring old for loop
+    value_counts = defaultdict(int)
+    for hashval in all_hashes:
+        value = table[hashval]
+        value_counts[value] += 1
+
+    assert value_counts[None] == len(noexist_hashes)
+    assert value_counts[1] == 20
+    assert value_counts[2] == 20
+    assert value_counts[3] == 20
+    assert value_counts[4] == 20
+    assert value_counts[5] == 20
 
 
 def test_save_load(tmpdir):
