@@ -231,7 +231,7 @@ namespace boomphf {
 
 			if(!timer_mode)
 			{
-				 fprintf(stderr,"[");fflush(stderr);
+                //fprintf(stderr,"[");fflush(stderr);
 			}
 		}
 
@@ -239,9 +239,9 @@ namespace boomphf {
 		{
 			set(todo);
 			 if(timer_mode)
-			 	fprintf(stderr,"\n");
+                 ; //fprintf(stderr,"\n");
 			 else
-			 	fprintf(stderr,"]\n");
+                 ; //fprintf(stderr,"]\n");
 
 			fflush(stderr);
 			todo= 0;
@@ -280,15 +280,15 @@ namespace boomphf {
 					int min_r  = (int)(rem / 60) ;
 					rem -= min_r*60;
 
-				 fprintf(stderr,"%c[%s]  %-5.3g%%   elapsed: %3i min %-2.0f sec   remaining: %3i min %-2.0f sec",13,
+                    /*fprintf(stderr,"%c[%s]  %-5.3g%%   elapsed: %3i min %-2.0f sec   remaining: %3i min %-2.0f sec",13,
 				 		message.c_str(),
 				 		100*(double)done/todo,
-				 		min_e,elapsed,min_r,rem);
+				 		min_e,elapsed,min_r,rem);*/
 
 				}
 				else
 				{
-					 fprintf(stderr,"-");fflush(stderr);
+                    //fprintf(stderr,"-");fflush(stderr);
 				}
 				partial -= steps;
 			}
@@ -319,14 +319,14 @@ namespace boomphf {
 					int min_r  =  (int)(rem / 60) ;
 					rem -= min_r*60;
 
-					 fprintf(stderr,"%c[%s]  %-5.3g%%   elapsed: %3i min %-2.0f sec   remaining: %3i min %-2.0f sec",13,
+                    /*fprintf(stderr,"%c[%s]  %-5.3g%%   elapsed: %3i min %-2.0f sec   remaining: %3i min %-2.0f sec",13,
 					 		message.c_str(),
 					 		100*(double)total_done/todo,
-					 		min_e,elapsed,min_r,rem);
+					 		min_e,elapsed,min_r,rem); */
 				}
 				else
 				{
-					 fprintf(stderr,"-");fflush(stderr);
+                    //fprintf(stderr,"-");fflush(stderr);
 				}
 				partial_threaded[tid] -= steps;
 
@@ -673,11 +673,11 @@ we need this 2-functors scheme because HashFunctors won't work with unordered_ma
 		//for debug purposes
 		void print() const
 		{
-			printf("bit array of size %lli: \n",_size);
+			printf("bit array of size %lli: \n",(long long int)_size);
 			for(uint64_t ii = 0; ii< _size; ii++)
 			{
 				if(ii%10==0)
-					printf(" (%llu) ",ii);
+					printf(" (%llu) ",(long long unsigned int)ii);
 				int val = (_bitArray[ii >> 6] >> (ii & 63 ) ) & 1;
 				printf("%i",val);
 			}
@@ -686,7 +686,7 @@ we need this 2-functors scheme because HashFunctors won't work with unordered_ma
 			printf("rank array : size %lu \n",_ranks.size());
 			for (uint64_t ii = 0; ii< _ranks.size(); ii++)
 			{
-				printf("%llu :  %lli,  ",ii,_ranks[ii]);
+				printf("%llu :  %lli,  ",(long long unsigned int)ii,(long long int)_ranks[ii]);
 			}
 			printf("\n");
 		}
@@ -924,7 +924,7 @@ we need this 2-functors scheme because HashFunctors won't work with unordered_ma
 
 				double total_fastmode_ram =  (_fastModeLevel+1) +  ( pow(_proba_collision,_fastModeLevel)) * (_nb_levels-(_fastModeLevel+1))   ;
 				
-                //				printf("for info, total work write each  : %.3f    total work inram from level %i : %.3f  total work raw : %.3f \n",total_writeEach,_fastModeLevel,total_fastmode_ram,total_raw);
+				//printf("for info, total work write each  : %.3f    total work inram from level %i : %.3f  total work raw : %.3f \n",total_writeEach,_fastModeLevel,total_fastmode_ram,total_raw);
 
 				if(writeEach)
 				{
@@ -967,7 +967,7 @@ we need this 2-functors scheme because HashFunctors won't work with unordered_ma
 		}
 
 
-		uint64_t lookup(elem_t elem)
+		uint64_t lookup(const elem_t &elem)
 		{
 			if(! _built) return ULLONG_MAX;
 			
@@ -1025,7 +1025,7 @@ we need this 2-functors scheme because HashFunctors won't work with unordered_ma
 
 			printf("Bitarray    %12llu  bits (%.2f %%)   (array + ranks )\n",
 				   totalsizeBitset, 100*(float)totalsizeBitset/totalsize);
-			printf("final hash  %12lu  bits (%.2f %%) (nb in final hash %lu)\n",
+			printf("Last level hash  %12lu  bits (%.2f %%) (nb in last level hash %lu)\n",
 				   _final_hash.size()*42*8, 100*(float)(_final_hash.size()*42*8)/totalsize,
 				   _final_hash.size() );
 			return totalsize;
@@ -1314,7 +1314,7 @@ we need this 2-functors scheme because HashFunctors won't work with unordered_ma
 
 
 		//compute level and returns hash of last level reached
-		uint64_t getLevel(hash_pair_t & bbhash, elem_t val,int * res_level, int maxlevel = 100, int minlevel =0)
+		uint64_t getLevel(hash_pair_t & bbhash, const elem_t &val, int * res_level, int maxlevel = 100, int minlevel =0)
 		//uint64_t getLevel(hash_pair_t & bbhash, elem_t val,int * res_level, int maxlevel = 100, int minlevel =0)
 
 		{
