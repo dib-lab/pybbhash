@@ -1,3 +1,4 @@
+"Test basic bbhash functionality."
 import bbhash
 
 def test_all(tmpdir):

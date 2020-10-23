@@ -41,7 +41,7 @@ cdef extern from "BooPHF.h" namespace "boomphf":
         uint64_t operator ()
 
     cdef cppclass mphf[T,U]:
-        mphf(unsigned long long, vector[T], int, float) except +
+        mphf(unsigned long long, vector[T], int, float, bool, bool) except +
         uint64_t lookup(uint64_t)
         void save(ofstream)
         void load(ifstream)
@@ -56,7 +56,7 @@ cdef class PyMPHF:
 
     def __cinit__(self, list kk, unsigned long long nelem, int num_thread, float gamma):
         cdef vector[uint64_t] kmers = kk
-        self.c_mphf.reset(new mphf_t(nelem, kmers, num_thread, gamma))
+        self.c_mphf.reset(new mphf_t(nelem, kmers, num_thread, gamma, False, False))
 
     def lookup(self, uint64_t kmer):
         cdef uint64_t value = deref(self.c_mphf).lookup(kmer)

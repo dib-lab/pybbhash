@@ -5,3 +5,6 @@ build/
 bbhash.egg-info
 dist
 MANIFEST
+__pycache__
+bbhash_table.cpp
+bbhash_table.cpython-*.so
