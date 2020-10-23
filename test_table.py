@@ -22,6 +22,34 @@ def test_create():
         assert table[hashval] == i
 
 
+def test_create_fill_default():
+    # default value should be int32 max
+    all_hashes = [ random.randint(100, 2**32) for i in range(100) ]
+    print(len(all_hashes))
+
+    table = BBHashTable()
+    # don't specify default value -
+    table.initialize(all_hashes)
+
+    # retrieve - what do we get?
+    for hashval, i in zip(all_hashes, range(100, 200)):
+        assert table[hashval] == 2**32 - 1
+
+
+def test_create_fill_specify():
+    # test specifying a default value
+    all_hashes = [ random.randint(100, 2**32) for i in range(100) ]
+    print(len(all_hashes))
+
+    table = BBHashTable()
+    # specify a default value...
+    table.initialize(all_hashes, fill=5)
+
+    # retrieve - what do we get?
+    for hashval, i in zip(all_hashes, range(100, 200)):
+        assert table[hashval] == 5
+
+
 def test_get_unique_values():
     # test the 'get_unique_values' functionality.
     all_hashes = [ random.randint(100, 2**32) for i in range(100) ]
