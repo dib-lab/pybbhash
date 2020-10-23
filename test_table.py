@@ -4,33 +4,33 @@ import numpy
 
 
 def test_create():
-    all_kmers = [ random.randint(100, 2**32) for i in range(100) ]
-    print(len(all_kmers))
+    all_hashes = [ random.randint(100, 2**32) for i in range(100) ]
+    print(len(all_hashes))
 
     table = BBHashTable()
-    table.initialize(all_kmers)
+    table.initialize(all_hashes)
 
-    for kmer_hash, i in zip(all_kmers, range(100, 200)):
-        table[kmer_hash] = i
+    for hashval, i in zip(all_hashes, range(100, 200)):
+        table[hashval] = i
 
-    for kmer_hash, i in zip(all_kmers, range(100, 200)):
-        assert table[kmer_hash] == i
+    for hashval, i in zip(all_hashes, range(100, 200)):
+        assert table[hashval] == i
 
 
 def test_get_unique_values():
-    all_kmers = [ random.randint(100, 2**32) for i in range(100) ]
-    print(len(all_kmers))
+    all_hashes = [ random.randint(100, 2**32) for i in range(100) ]
+    print(len(all_hashes))
 
     table = BBHashTable()
-    table.initialize(all_kmers)
+    table.initialize(all_hashes)
 
-    for kmer_hash, value in zip(all_kmers, [1, 2, 3, 4, 5]*20):
-        table[kmer_hash] = value
+    for hashval, value in zip(all_hashes, [1, 2, 3, 4, 5]*20):
+        table[hashval] = value
 
-    for kmer_hash, value in zip(all_kmers, [1, 2, 3, 4, 5]*20):
-        assert table[kmer_hash] == value
+    for hashval, value in zip(all_hashes, [1, 2, 3, 4, 5]*20):
+        assert table[hashval] == value
 
-    value_count = table.get_unique_values(all_kmers)
+    value_count = table.get_unique_values(all_hashes)
     assert value_count[1] == 20
     assert value_count[2] == 20
     assert value_count[3] == 20
@@ -39,22 +39,23 @@ def test_get_unique_values():
 
 
 def test_get_unique_values_noexist():
-    all_kmers = [ random.randint(100, 2**32) for i in range(100) ]
-    print(len(all_kmers))
+    # check to see what happens when we add in hashes that don't exist.
+    all_hashes = [ random.randint(100, 2**32) for i in range(100) ]
+    print(len(all_hashes))
 
     table = BBHashTable()
-    table.initialize(all_kmers)
+    table.initialize(all_hashes)
 
-    for kmer_hash, value in zip(all_kmers, [1, 2, 3, 4, 5]*20):
-        table[kmer_hash] = value
+    for hashval, value in zip(all_hashes, [1, 2, 3, 4, 5]*20):
+        table[hashval] = value
 
-    for kmer_hash, value in zip(all_kmers, [1, 2, 3, 4, 5]*20):
-        assert table[kmer_hash] == value
+    for hashval, value in zip(all_hashes, [1, 2, 3, 4, 5]*20):
+        assert table[hashval] == value
 
-    noexist_kmers = set([ random.randint(100, 2**32) for i in range(100) ])
-    noexist_kmers -= set(all_kmers)
-    all_kmers += list(noexist_kmers)
-    value_count = table.get_unique_values(all_kmers)
+    noexist_hashes = set([ random.randint(100, 2**32) for i in range(100) ])
+    noexist_hashes -= set(all_hashes)
+    all_hashes += list(noexist_hashes)
+    value_count = table.get_unique_values(all_hashes)
     assert value_count[1] == 20
     assert value_count[2] == 20
     assert value_count[3] == 20
@@ -64,18 +65,18 @@ def test_get_unique_values_noexist():
 
 
 def test_save_load():
-    all_kmers = [ random.randint(100, 2**32) for i in range(100) ]
-    print(len(all_kmers))
+    all_hashes = [ random.randint(100, 2**32) for i in range(100) ]
+    print(len(all_hashes))
 
     table = BBHashTable()
-    table.initialize(all_kmers)
+    table.initialize(all_hashes)
 
-    for kmer_hash, i in zip(all_kmers, range(100, 200)):
-        table[kmer_hash] = i
+    for hashval, i in zip(all_hashes, range(100, 200)):
+        table[hashval] = i
 
     table.save('xxx', 'yyy')
 
     table2 = BBHashTable.load('xxx', 'yyy')
 
-    for kmer_hash, i in zip(all_kmers, range(100, 200)):
-        assert table2[kmer_hash] == i
+    for hashval, i in zip(all_hashes, range(100, 200)):
+        assert table2[hashval] == i
