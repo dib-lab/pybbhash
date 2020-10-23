@@ -1,9 +1,13 @@
-from bbhash_table import BBHashTable
+"Test BBHashTable."
 import random
-import numpy
+import tempfile
+import os.path
+
+from bbhash_table import BBHashTable
 
 
 def test_create():
+    # try creating and using a BBHashTable to store hashes and associated vals.
     all_hashes = [ random.randint(100, 2**32) for i in range(100) ]
     print(len(all_hashes))
 
@@ -18,6 +22,7 @@ def test_create():
 
 
 def test_get_unique_values():
+    # test the 'get_unique_values' functionality.
     all_hashes = [ random.randint(100, 2**32) for i in range(100) ]
     print(len(all_hashes))
 
@@ -64,7 +69,8 @@ def test_get_unique_values_noexist():
     assert len(list(value_count)) == 5
 
 
-def test_save_load():
+def test_save_load(tmpdir):
+    # test save & load!
     all_hashes = [ random.randint(100, 2**32) for i in range(100) ]
     print(len(all_hashes))
 
@@ -74,9 +80,12 @@ def test_save_load():
     for hashval, i in zip(all_hashes, range(100, 200)):
         table[hashval] = i
 
-    table.save('xxx', 'yyy')
+    mphf_filename = os.path.join(tmpdir, 'table.mphf')
+    array_filename = os.path.join(tmpdir, 'table.array')
 
-    table2 = BBHashTable.load('xxx', 'yyy')
+    table.save(mphf_filename, array_filename)
+
+    table2 = BBHashTable.load(mphf_filename, array_filename)
 
     for hashval, i in zip(all_hashes, range(100, 200)):
         assert table2[hashval] == i
