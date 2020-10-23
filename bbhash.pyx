@@ -66,8 +66,9 @@ cdef class PyMPHF:
             return value
         return None
 
-    def lookup_many(self, hashvals):
-        hashes = numpy.array(hashvals, dtype=numpy.uint64)
+    def lookup_many(self, hashes):
+        if type(hashes) != numpy.ndarray:
+            hashes = numpy.array(hashes, dtype=numpy.uint64)
         cdef uint32_t c_hashes_len = len(hashes)
         cdef uint64_t[:] hashes_view = hashes
 

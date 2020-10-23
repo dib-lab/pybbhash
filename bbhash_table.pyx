@@ -56,11 +56,10 @@ class BBHashTable(object):
 
     def get_unique_values(self, hashes):
         "Retrieve unique values for item."
-        # potential other optimizations -
-        # - speed up access to self.mphf.lookup by doing direct calls
         values = defaultdict(int)
 
-        hashes = numpy.array(hashes, dtype=numpy.uint64)
+        if type(hashes) != numpy.ndarray:
+            hashes = numpy.array(hashes, dtype=numpy.uint64)
         cdef uint64_t[:] hashes_view = hashes
         cdef uint32_t c_hashes_len = len(hashes)
 
@@ -79,7 +78,7 @@ class BBHashTable(object):
             c_mp_hash = mp_hashes_view[i]
             i += 1
 
-            if c_mp_hash == UINT64_MAX:
+            if c_mp_hash == UINT64_MAX:   # no match.
                 continue
 
             if mphf_to_hash_view[c_mp_hash] == c_hashval:   # found!
