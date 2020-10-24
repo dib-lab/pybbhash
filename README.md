@@ -1,5 +1,10 @@
 # pybbhash
 
+[![PyPI](https://badge.fury.io/py/sourmash.svg)](https://pypi.org/project/bbhash/)
+
+https://d25lcipzij17d.cloudfront.net/badge.svg?id=py&type=6&
+https://pypi.org/project/sourmash/
+
 This is a Python (Cython) wrapper for the
 [BBHash codebase](https://github.com/rizkg/BBHash) for building
 [minimal perfect hash functions](https://en.wikipedia.org/wiki/Perfect_hash_function#Minimal_perfect_hash_function).
