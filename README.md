@@ -3,9 +3,6 @@
 <a href="https://pypi.org/project/bbhash/"><img alt="PyPI" src="https://badge.fury.io/py/bbhash.svg"></a>
 <a href="https://github.com/dib-lab/pybbhash/blob/latest/LICENSE.txt"><img alt="License: 3-Clause BSD" src="https://img.shields.io/badge/License-BSD%203--Clause-blue.svg"></a>
 
-https://d25lcipzij17d.cloudfront.net/badge.svg?id=py&type=6&
-https://pypi.org/project/sourmash/
-
 This is a Python (Cython) wrapper for the
 [BBHash codebase](https://github.com/rizkg/BBHash) for building
 [minimal perfect hash functions](https://en.wikipedia.org/wiki/Perfect_hash_function#Minimal_perfect_hash_function).
