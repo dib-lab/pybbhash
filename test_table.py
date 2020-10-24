@@ -4,6 +4,8 @@ import tempfile
 import os.path
 from collections import defaultdict
 
+import pytest
+
 from bbhash_table import BBHashTable
 
 
@@ -112,6 +114,30 @@ def test_get_unique_values_noexist():
     assert value_counts[3] == 20
     assert value_counts[4] == 20
     assert value_counts[5] == 20
+
+
+def test_get_unique_values_noexist_fail():
+    # test requirement that hashes exist
+    all_hashes = [ random.randint(100, 2**32) for i in range(100) ]
+    print(len(all_hashes))
+
+    table = BBHashTable()
+    table.initialize(all_hashes)
+
+    for hashval, value in zip(all_hashes, [1, 2, 3, 4, 5]*20):
+        table[hashval] = value
+
+    noexist_hash = all_hashes[0] + 1
+    while noexist_hash in all_hashes:
+        noexist_hash += 1
+
+    value_counts = table.get_unique_values([ noexist_hash ])
+    assert not value_counts
+
+    with pytest.raises(ValueError) as exc:
+        value_counts = table.get_unique_values([ noexist_hash ],
+                                               require_exist=True)
+    print(str(exc))
 
 
 def test_save_load(tmpdir):
