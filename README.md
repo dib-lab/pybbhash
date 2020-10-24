@@ -1,6 +1,6 @@
 # pybbhash
 
-[![PyPI](https://badge.fury.io/py/sourmash.svg)](https://pypi.org/project/bbhash/)
+[![PyPI](https://badge.fury.io/py/bbhash.svg)](https://pypi.org/project/bbhash/)
 
 https://d25lcipzij17d.cloudfront.net/badge.svg?id=py&type=6&
 https://pypi.org/project/sourmash/
