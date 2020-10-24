@@ -1,6 +1,7 @@
 # pybbhash
 
 [![PyPI](https://badge.fury.io/py/bbhash.svg)](https://pypi.org/project/bbhash/)
+<a href="https://github.com/dib-lab/pybbhash/blob/latest/LICENSE.txt"><img alt="License: 3-Clause BSD" src="https://img.shields.io/badge/License-BSD%203--Clause-blue.svg"></a>
 
 https://d25lcipzij17d.cloudfront.net/badge.svg?id=py&type=6&
 https://pypi.org/project/sourmash/
