@@ -140,6 +140,23 @@ def test_get_unique_values_noexist_fail():
     print(str(exc))
 
 
+def test_get_unique_values_set():
+    # try passing in a set, instead of list
+    all_hashes = [ random.randint(100, 2**32) for i in range(100) ]
+    print(len(all_hashes))
+
+    table = BBHashTable()
+    table.initialize(all_hashes)
+
+    for hashval, value in zip(all_hashes, [1, 2, 3, 4, 5]*20):
+        table[hashval] = value
+
+    hashvals_set = set(all_hashes)
+
+    value_counts = table.get_unique_values(hashvals_set)
+    assert value_counts
+
+
 def test_save_load(tmpdir):
     # test save & load!
     all_hashes = [ random.randint(100, 2**32) for i in range(100) ]
