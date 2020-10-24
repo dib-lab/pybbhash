@@ -16,14 +16,14 @@ if sys.platform == 'darwin':              # Mac OS X?
 
 setup(
    name='bbhash',
-   version='0.5',
+   version='0.5.1',
    description="A Python wrapper for the BBHash Minimal Perfect Hash Function",
    author="C. Titus Brown",
    author_email="titus@idyll.org",
    license="BSD 3-clause",
    url="http://github.com/dib-lab/pybbhash",
-   setup_requires=["Cython>=0.29.21", "setuptools>=50", "numpy"],
-   install_requires=['Cython>=0.29.21', "setuptools>=50", "numpy"],
+   setup_requires=["Cython>=0.29.21", "setuptools>=49", "numpy"],
+   install_requires=['Cython>=0.29.21', "setuptools>=49", "numpy"],
    ext_modules =
           [Extension('bbhash',
                      sources=['bbhash.pyx'],
