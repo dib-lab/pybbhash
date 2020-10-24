@@ -1,8 +1,10 @@
 # distutils: language = c++
 from libcpp.vector cimport vector
 from libcpp.memory cimport unique_ptr
-from libc.stdint cimport uint64_t, UINT64_MAX
+from libc.stdint cimport UINT32_MAX, uint64_t, uint32_t, UINT64_MAX
 from cython.operator cimport dereference as deref
+
+import numpy
 
 ### wrap iostream stuff
 
@@ -63,6 +65,22 @@ cdef class PyMPHF:
         if value != UINT64_MAX:
             return value
         return None
+
+    def lookup_many(self, hashes):
+        if type(hashes) != numpy.ndarray:
+            hashes = numpy.array(hashes, dtype=numpy.uint64)
+        cdef uint32_t c_hashes_len = len(hashes)
+        cdef uint64_t[:] hashes_view = hashes
+
+        mp_hashes = numpy.ndarray(c_hashes_len, dtype=numpy.uint64)
+        cdef uint64_t[:] mp_hashes_view = mp_hashes
+
+        cdef uint32_t i = 0
+        while i < c_hashes_len:
+            mp_hashes_view[i] = deref(self.c_mphf).lookup(hashes_view[i])
+            i += 1
+
+        return mp_hashes
 
     def save(self, str filename):
         cdef ofstream* outputter
