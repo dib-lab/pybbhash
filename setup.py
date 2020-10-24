@@ -1,6 +1,5 @@
 import sys
-from distutils.core import setup
-from distutils.extension import Extension
+from setuptools import setup, Extension
 from Cython.Distutils import build_ext
 
 # read the contents of your README file
@@ -38,5 +37,5 @@ setup(
    headers=['BooPHF.h'],
    cmdclass = {'build_ext': build_ext},
    long_description=long_description,
-   long_description_content_type="text/markdown"
+   long_description_content_type="text/markdown",
 )
