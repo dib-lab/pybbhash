@@ -4,7 +4,7 @@ all:
 clean:
 	rm -fr bbhash.cpp bbhash.cpython-36m-darwin.so build/ bbhash.egg-info
 
-test:
+test: all
 	py.test
 
 upload:

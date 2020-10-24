@@ -1,4 +1,6 @@
 "Test basic bbhash functionality."
+import pytest
+
 import bbhash
 
 def test_all(tmpdir):
@@ -18,10 +20,25 @@ def test_lookup():
     assert x.lookup(200) is None
 
 
+def test_construct_from_set():
+    with pytest.raises(TypeError):        # CTB: could fix this.
+        x = bbhash.PyMPHF(set(range(10)), 10, 1, 1.0)
+
+
 def test_lookup():
     x = bbhash.PyMPHF(list(range(10)), 10, 1, 1.0)
 
     q = list(range(10))
+    y = x.lookup_many(q)
+
+    for i in y:
+        assert i is not None
+
+
+def test_lookup_set():
+    x = bbhash.PyMPHF(list(range(10)), 10, 1, 1.0)
+
+    q = set(range(10))
     y = x.lookup_many(q)
 
     for i in y:

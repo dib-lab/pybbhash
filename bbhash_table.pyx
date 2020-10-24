@@ -54,12 +54,12 @@ class BBHashTable(object):
 
         self.mphf_to_value[mp_hash] = value
 
-    def get_unique_values(self, hashes):
+    def get_unique_values(self, hashes, require_exist=False):
         "Retrieve unique values for item."
         values = defaultdict(int)
 
         if type(hashes) != numpy.ndarray:
-            hashes = numpy.array(hashes, dtype=numpy.uint64)
+            hashes = numpy.fromiter(hashes, numpy.uint64, len(hashes))
         cdef uint64_t[:] hashes_view = hashes
         cdef uint32_t c_hashes_len = len(hashes)
 
@@ -76,14 +76,14 @@ class BBHashTable(object):
         while i < c_hashes_len:
             c_hashval = hashes_view[i]
             c_mp_hash = mp_hashes_view[i]
-            i += 1
-
-            if c_mp_hash == UINT64_MAX:   # no match.
-                continue
-
-            if mphf_to_hash_view[c_mp_hash] == c_hashval:   # found!
+ 
+            if c_mp_hash != UINT64_MAX and \
+               mphf_to_hash_view[c_mp_hash] == c_hashval:   # found!
                 c_value = mphf_to_value_view[c_mp_hash]
                 values[c_value] += 1
+            elif require_exist:
+                raise ValueError("hash at position {} does not exist".format(i))
+            i += 1
 
         return values
 
