@@ -3,6 +3,12 @@ from distutils.core import setup
 from distutils.extension import Extension
 from Cython.Distutils import build_ext
 
+# read the contents of your README file
+from os import path
+this_directory = path.abspath(path.dirname(__file__))
+with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
+   long_description = f.read()
+
 EXTRA_COMPILE_ARGS=['-std=c++11']
 if sys.platform == 'darwin':              # Mac OS X?
     EXTRA_COMPILE_ARGS.extend(['-arch', 'x86_64', '-mmacosx-version-min=10.7',
@@ -30,5 +36,7 @@ setup(
                      language='c++',
                      extra_compile_args=EXTRA_COMPILE_ARGS)],
    headers=['BooPHF.h'],
-   cmdclass = {'build_ext': build_ext}
+   cmdclass = {'build_ext': build_ext},
+   long_description=long_description,
+   long_description_content_type="text/markdown"
 )
