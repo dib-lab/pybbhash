@@ -1,1 +1,1 @@
-include BooPHF.h
+include BooPHF.h Makefile README.md LICENSE.txt
