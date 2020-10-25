@@ -16,7 +16,7 @@ if sys.platform == 'darwin':              # Mac OS X?
 
 setup(
    name='bbhash',
-   version='0.5.1',
+   version='0.5.2',
    description="A Python wrapper for the BBHash Minimal Perfect Hash Function",
    author="C. Titus Brown",
    author_email="titus@idyll.org",
