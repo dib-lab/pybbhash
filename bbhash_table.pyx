@@ -54,6 +54,12 @@ class BBHashTable(object):
 
         self.mphf_to_value[mp_hash] = value
 
+    def get_mem(self):
+        "Get memory usage."
+        return self.mphf.get_mem() + \
+               self.mphf_to_hash.nbytes + \
+               self.mphf_to_value.nbytes
+
     def get_unique_values(self, hashes, require_exist=False):
         "Retrieve unique values for item."
         values = defaultdict(int)
