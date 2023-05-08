@@ -45,6 +45,7 @@ cdef extern from "BooPHF.h" namespace "boomphf":
     cdef cppclass mphf[T,U]:
         mphf(unsigned long long, vector[T], int, float, bool, bool) except +
         uint64_t lookup(uint64_t)
+        uint64_t totalBitSize()
         void save(ofstream)
         void load(ifstream)
 
@@ -81,6 +82,9 @@ cdef class PyMPHF:
             i += 1
 
         return mp_hashes
+
+    def get_mem(self):
+        return deref(self.c_mphf).totalBitSize()
 
     def save(self, str filename):
         cdef ofstream* outputter
