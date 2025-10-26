@@ -1,5 +1,7 @@
+.PHONY: dist wheel test
+
 all:
-	python setup.py build_ext -i
+	pip install -e .
 
 clean:
 	rm -fr bbhash.cpp bbhash.cpython-36m-darwin.so build/ bbhash.egg-info
@@ -7,7 +9,13 @@ clean:
 test: all
 	py.test
 
-upload:
-	rm -fr dist
-	python setup.py sdist
+upload: dist
 	twine upload dist/bbhash-*.tar.gz
+
+dist:
+	rm -fr dist
+	python -m build -s
+
+wheel:
+	rm -fr dist
+	python -m build
