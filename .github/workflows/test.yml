@@ -8,7 +8,7 @@ jobs:
 
     strategy:
       matrix:
-        python: [3.7]
+        python: [3.12]
 
     name: Python ${{ matrix.python }}
 
@@ -28,9 +28,6 @@ jobs:
 
       - name: Install coverage dependencies
         run: pip install pytest-cov
-
-      - name: Build
-        run: python setup.py build_ext --inplace
 
       - name: Install pybbhash
         run: pip install -e .
