@@ -7,6 +7,9 @@ import bbhash
 import os
 from collections import defaultdict
 
+# huh, ok.
+STUFF="Hi"
+
 class BBHashTable(object):
     """\
     Retrieve values by MPHF lookup.
