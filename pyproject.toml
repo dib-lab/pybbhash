@@ -1,0 +1,33 @@
+[build-system]
+requires = [
+   "setuptools", "cython"
+]
+
+[project]
+name = "bbhash"
+version = "0.6.0"
+readme = "README.md"
+description = "A Python wrapper for the BBHash Minimal Perfect Hash Function"
+license = "BSD-3-Clause"
+
+authors = [
+   { name="C. Titus Brown" },
+]
+
+dependencies = [
+   "numpy",
+]
+
+requires-python = ">=3.11"
+
+[metadata]
+license = { text = "BSD 3-Clause License" }
+
+[project.urls]
+"Source" = "http://github.com/dib-lab/pybbhash"
+
+[tool.setuptools]
+ext-modules = [
+  { name = "bbhash", sources = ["src/bbhash.pyx"], language="c++", depends=["src/BooPHF.h"] },
+  { name = "bbhash_table", sources = ["src/bbhash_table.pyx"], language="c++" }
+]
